@@ -1,2 +1,2 @@
-# MNH frontend framework
-Material-ui + Next.js + Hareactive
+# Max Framework
+material-ui & next.js, hareactive is optional.
