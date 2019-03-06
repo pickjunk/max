@@ -1,10 +1,10 @@
 import '../utils/bootstrap';
 // --- Post bootstrap -----
-import React from "react";
-import Typography from "@material-ui/core/Typography";
-import Layout from "../layouts/manager";
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import Layout from '../layouts/manager';
 
-export default function Index() {
+export default function Form() {
   return (
     <Layout>
       <Typography paragraph>

@@ -15,13 +15,3 @@ export default {
     useNextVariants: true
   }
 };
-
-export const globalStyle = {
-  "@global": {
-    ".center": {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    }
-  },
-};

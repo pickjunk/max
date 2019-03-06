@@ -1,11 +1,12 @@
 import '../utils/bootstrap';
 // --- Post bootstrap -----
-import React from "react";
-import App, { Container } from "next/app";
-import Head from "next/head";
+import React from 'react';
+import App, { Container } from 'next/app';
+import Head from 'next/head';
 import { StylesProvider, ThemeProvider } from '@material-ui/styles';
-import CssBaseline from "@material-ui/core/CssBaseline";
-import getPageContext from "../utils/getPageContext";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import getPageContext from '../utils/getPageContext';
+import { name } from '../config/app';
 
 class NextApp extends App {
   constructor() {
@@ -15,7 +16,7 @@ class NextApp extends App {
 
   componentDidMount() {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
+    const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
@@ -26,7 +27,7 @@ class NextApp extends App {
     return (
       <Container>
         <Head>
-          <title>My page</title>
+          <title>{name}</title>
         </Head>
         {/* Wrap every page in Styles and Theme providers */}
         <StylesProvider

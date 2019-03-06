@@ -1,26 +1,28 @@
 import { create, SheetsRegistry } from 'jss';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { createGenerateClassName } from '@material-ui/styles';
-import customTheme, { globalStyle } from '../theme';
+import customTheme from '../config/theme';
+import globalStyle from '../config/global';
 import preset from 'jss-preset-default';
 
 // jss default preset
 const jss = create(preset());
 
-// jss global style
-jss.createStyleSheet(globalStyle).attach();
-
 // custom theme
 const theme = createMuiTheme(customTheme);
 
 function createPageContext() {
+  // jss global style
+  const sheetsRegistry = new SheetsRegistry();
+  sheetsRegistry.add(jss.createStyleSheet(globalStyle).attach());
+
   return {
     theme,
     jss,
     // This is needed in order to deduplicate the injection of CSS in the page.
     sheetsManager: new Map(),
     // This is needed in order to inject the critical CSS.
-    sheetsRegistry: new SheetsRegistry(),
+    sheetsRegistry,
     // The standard class name generator.
     generateClassName: createGenerateClassName(),
   };

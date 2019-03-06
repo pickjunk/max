@@ -1,90 +1,96 @@
-import React, { useState } from "react";
-import classNames from "classnames";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import { makeStyles } from "@material-ui/styles";
+import React, { useState } from 'react';
+import clsx from 'clsx';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import TableChartIcon from '@material-ui/icons/TableChart';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import { makeStyles } from '@material-ui/styles';
+import { name } from '../config/app';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex"
+    display: 'flex',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   grow: {
     flexGrow: 1,
   },
   menuButton: {
     marginLeft: 12,
-    marginRight: 36
+    marginRight: 36,
   },
   hide: {
-    display: "none"
+    display: 'none',
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: "nowrap"
+    whiteSpace: 'nowrap',
   },
   drawerOpen: {
     width: drawerWidth,
-    transition: theme.transitions.create("width", {
+    transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   drawerClose: {
-    transition: theme.transitions.create("width", {
+    transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
-    overflowX: "hidden",
+    overflowX: 'hidden',
     width: theme.spacing.unit * 7 + 1,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing.unit * 9 + 1
-    }
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing.unit * 9 + 1,
+    },
   },
   toolbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  toolbarSpread: {
+    paddingLeft: 0,
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3
-  }
+    padding: theme.spacing.unit * 3,
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+  },
 }));
 
 export default function Manager({ children }) {
@@ -96,22 +102,22 @@ export default function Manager({ children }) {
   return (
     <div className={classes.root}>
       <AppBar
-        className={classNames(classes.appBar, {
-          [classes.appBarShift]: open
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
         })}
       >
-        <Toolbar disableGutters={!open}>
+        <Toolbar className={clsx({ [classes.toolbarSpread]: !open })}>
           <IconButton
             color="inherit"
             onClick={() => setOpen(true)}
-            className={classNames(classes.menuButton, {
-              [classes.hide]: open
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
             })}
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            MNH 前端脚手架
+            {name}
           </Typography>
           <IconButton
             onClick={e => setAnchorEl(e.currentTarget)}
@@ -123,31 +129,31 @@ export default function Manager({ children }) {
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: "top",
-              horizontal: "right"
+              vertical: 'top',
+              horizontal: 'right',
             }}
             transformOrigin={{
-              vertical: "top",
-              horizontal: "right"
+              vertical: 'top',
+              horizontal: 'right',
             }}
             open={Boolean(anchorEl)}
             onClose={() => setAnchorEl(null)}
           >
-            <MenuItem onClick={() => setAnchorEl(null)}>退出登录</MenuItem>
+            <MenuItem onClick={() => setAnchorEl(null)}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
       <Drawer
         variant="permanent"
-        className={classNames(classes.drawer, {
+        className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open
+          [classes.drawerClose]: !open,
         })}
         classes={{
-          paper: classNames({
+          paper: clsx({
             [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })
+            [classes.drawerClose]: !open,
+          }),
         }}
         open={open}
       >
@@ -158,23 +164,17 @@ export default function Manager({ children }) {
         </div>
         <Divider />
         <List>
-          <ListItem button key="dashboard">
+          <ListItem button key="table">
             <ListItemIcon>
-              <DashboardIcon />
+              <TableChartIcon />
             </ListItemIcon>
-            <ListItemText primary="仪表盘" />
+            <ListItemText primary="Table" />
           </ListItem>
-          <ListItem button key="mail">
+          <ListItem button key="form">
             <ListItemIcon>
-              <MailIcon />
+              <AssignmentIcon />
             </ListItemIcon>
-            <ListItemText primary="邮件" />
-          </ListItem>
-          <ListItem button key="admin">
-            <ListItemIcon>
-              <SupervisedUserCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary="管理员" />
+            <ListItemText primary="Form" />
           </ListItem>
         </List>
       </Drawer>

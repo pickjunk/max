@@ -19,7 +19,9 @@ class MyDocument extends Document {
           {/* PWA primary color */}
           <meta
             name="theme-color"
-            content={pageContext ? pageContext.theme.palette.primary.main : null}
+            content={
+              pageContext ? pageContext.theme.palette.primary.main : null
+            }
           />
         </Head>
         <body>

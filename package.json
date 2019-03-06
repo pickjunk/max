@@ -6,18 +6,19 @@
     "@material-ui/core": "next",
     "@material-ui/icons": "next",
     "@material-ui/styles": "next",
-    "classnames": "2.2.6",
+    "clsx": "1.0.3",
     "express": "4.16.4",
     "jss": "next",
-    "jss-preset-default": "^10.0.0-alpha.7",
+    "jss-preset-default": "10.0.0-alpha.7",
     "next": "latest",
     "prop-types": "15.7.2",
     "react": "16.8.3",
-    "react-dom": "16.8.3"
+    "react-dom": "16.8.3",
+    "rxjs": "6.4.0"
   },
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   }
 }
