@@ -1,11 +1,11 @@
-# MNH frontend framework
-Material-ui + Next.js + Hareactive
+# Max Framework
+material-ui + next.js, rxjs is optional.
 
 ### Quick Start
 
 ```bash
-$ npm i # 安装依赖
-$ cp config/.app.js config/app.js # 复制应用配置模板
-$ vim config/app.js # 把配置修改为自己的配置
-$ npm run dev # 拉起开发服务器
+$ npm i # install deps
+$ cp config/.app.js config/app.js # copy app config
+$ vim config/app.js # modify app config as you expected
+$ npm run dev # start dev server
 ```
