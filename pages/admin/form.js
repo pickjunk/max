@@ -1,8 +1,8 @@
-import '../utils/bootstrap';
+import '../../utils/bootstrap';
 // --- Post bootstrap -----
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Layout from '../layouts/manager';
+import Layout from '../../layouts/manager';
 
 export default function Form() {
   return (

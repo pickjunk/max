@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,6 +18,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TableChartIcon from '@material-ui/icons/TableChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { makeStyles } from '@material-ui/styles';
+import Cookies from 'js-cookie';
+import router from 'next/router';
 import { name } from '../config/app';
 
 const drawerWidth = 240;
@@ -94,6 +96,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Manager({ children }) {
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (!token) {
+      router.replace('/gate');
+    }
+  });
+
   const classes = useStyles();
 
   const [open, setOpen] = useState(true);
@@ -179,7 +188,7 @@ export default function Manager({ children }) {
         </List>
       </Drawer>
       <main className={classes.content}>
-        {/* AppBar的position为fixed，需要一个占位元素 */}
+        {/* AppBar's position is fixed, need a placeholder */}
         <div className={classes.toolbar} />
 
         {children}

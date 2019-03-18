@@ -2,8 +2,8 @@ import request from './request';
 import Raven from './raven';
 import router from 'next/router';
 
-export default function graphql(query, variables) {
-  return request('/api/graphql', {
+export default function graphql(uri, query, variables) {
+  return request(uri, {
     method: 'POST',
     body: {
       query,

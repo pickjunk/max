@@ -7,6 +7,7 @@ import { StylesProvider, ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import getPageContext from '../utils/getPageContext';
 import { name } from '../config/app';
+import '../utils/promise';
 
 class NextApp extends App {
   constructor() {

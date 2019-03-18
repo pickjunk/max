@@ -8,10 +8,13 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import CloseIcon from '@material-ui/icons/Close';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
+import router from 'next/router';
+import Cookies from 'js-cookie';
+import graphql from '../utils/graphql';
+import useForm from '../utils/form';
+import Tip from '../components/Tip';
 
 const useStyles = makeStyles(theme => ({
   background: {
@@ -43,79 +46,131 @@ const useStyles = makeStyles(theme => ({
     },
     composes: ['center'],
   },
-  close: {
-    padding: theme.spacing.unit / 2,
-  },
-  notice: {
-    backgroundColor: theme.palette.error.dark,
-  }
 }));
 
-function login(name, pa) {
-  console.log('login');
+const fields = {
+  name: {
+    initValue: '',
+    validators: [v => (!v ? 'name is required' : '')],
+  },
+  passwd: {
+    initValue: '',
+    validators: [v => (!v ? 'passwd is required' : '')],
+  },
+};
+
+const schema = `
+mutation ($name: String!, $passwd: String!) {
+  login(name: $name, passwd: $passwd)
 }
+`;
 
 export default function Gate() {
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      router.replace('/');
+    }
+  });
+
   const classes = useStyles();
 
-  const [name, setName] = useState('');
-  const [passwd, setPasswd] = useState('');
+  const form = useForm(fields);
   const [showPasswd, setShowPasswd] = useState(false);
 
+  const [submitting, setSubmitting] = useState(false);
   const [loginError, setLoginError] = useState('');
-  const notice = (
-    <Snackbar
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
-      open={!loginError}
-      autoHideDuration={6000}
-      message={loginError}
-      action={[
-        <IconButton
-          color="inherit"
-          className={classes.close}
-          onClick={() => setLoginError('')}
-        >
-          <CloseIcon />
-        </IconButton>,
-      ]}
-    />
-  );
+  async function login() {
+    const valid = await form.validate();
+    if (!valid) {
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      await graphql('/api/gate', schema, form.data());
+      router.replace('/');
+    } catch ({ code }) {
+      switch (code) {
+        case 100:
+          setLoginError('Name or Passwd is incorrect');
+          break;
+        default:
+          setLoginError('Internal Server Error');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <div className={classes.background}>
-      {notice}
+      <Tip
+        type="error"
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        autoHideDuration={2000}
+        message={loginError}
+        onClose={() => setLoginError('')}
+      />
 
       <Card className={classes.card}>
         <CardContent className={classes.content}>
-          <TextField
-            variant="outlined"
-            label="Account"
-            value={name}
-            onChange={e => setName(e.target.value.trim())}
-            style={{ marginBottom: 16 }}
-          />
-          <TextField
-            variant="outlined"
-            label="Password"
-            type={showPasswd ? 'text' : 'password'}
-            value={passwd}
-            onChange={e => setPasswd(e.target.value.trim())}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPasswd(!showPasswd)}>
-                    {showPasswd ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+          {form.field(
+            'name',
+            ({ value, setValue, status, error, validate }) => (
+              <TextField
+                variant="outlined"
+                label="Name"
+                style={{ marginBottom: 16 }}
+                value={value}
+                onChange={e => {
+                  const v = e.target.value.trim();
+                  setValue(v);
+                  validate(v);
+                }}
+                onBlur={() => validate()}
+                error={status === 'fail'}
+                helperText={error}
+              />
+            ),
+          )}
+          {form.field(
+            'passwd',
+            ({ value, setValue, status, error, validate }) => (
+              <TextField
+                variant="outlined"
+                label="Password"
+                type={showPasswd ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton onClick={() => setShowPasswd(!showPasswd)}>
+                      {showPasswd ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  ),
+                }}
+                value={value}
+                onChange={e => {
+                  const v = e.target.value.trim();
+                  setValue(v);
+                  validate(v);
+                }}
+                onBlur={() => validate()}
+                error={status === 'fail'}
+                helperText={error}
+              />
+            ),
+          )}
         </CardContent>
         <CardActions className={classes.action}>
-          <Button variant="contained" color="primary" onClick={onClick}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={login}
+            disabled={submitting}
+          >
             Login
           </Button>
         </CardActions>

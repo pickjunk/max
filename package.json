@@ -7,11 +7,17 @@
     "@material-ui/icons": "next",
     "@material-ui/styles": "next",
     "clsx": "1.0.3",
+    "cross-env": "^5.2.0",
     "express": "4.16.4",
+    "http-proxy-middleware": "0.19.1",
+    "js-cookie": "^2.2.0",
     "jss": "next",
     "jss-preset-default": "10.0.0-alpha.7",
+    "lodash": "4.17.11",
+    "material-table": "^1.23.4",
     "next": "latest",
     "prop-types": "15.7.2",
+    "raven-js": "3.27.0",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "rxjs": "6.4.0"
@@ -19,6 +25,6 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "cross-env NODE_ENV=production node server.js"
   }
 }

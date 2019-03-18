@@ -1,8 +1,8 @@
 module.exports = {
   '/gate': { page: '/gate' },
 
-  '/': { page: '/table' },
-  '/form': { page: '/form' },
+  '/': { page: '/admin/table' },
+  '/admin/:id': { page: '/admin/form' },
 
   '/exception/:code': { page: '/exception' },
 };

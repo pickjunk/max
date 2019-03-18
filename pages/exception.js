@@ -7,9 +7,9 @@ import { makeStyles } from '@material-ui/styles';
 import Layout from '../layouts/manager';
 
 const map = {
-  '403': 'Access Denied',
+  '403': 'Forbidden',
   '404': 'Not Found',
-  '500': 'Server Internal Error',
+  '500': 'Internal Server Error',
 };
 
 const useStyles = makeStyles(() => ({
