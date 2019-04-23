@@ -1,5 +1,6 @@
 # Max Framework
-material-ui + next.js, rxjs is optional.
+
+@pickjunk/min + material-ui
 
 ### Quick Start
 
@@ -7,8 +8,6 @@ material-ui + next.js, rxjs is optional.
 $ npm i # install deps
 $ cp config/.app.js config/app.js # copy app config
 $ vim config/app.js # modify your own app config
-$ cp config/.proxy.js config/proxy.js # copy proxy config
-$ vim config/proxy.js # modify your own proxy config
 $ npm run dev # start dev server
 ```
 
