@@ -1,6 +1,6 @@
 # Max Framework
 
-@pickjunk/min + material-ui
+min + material-ui
 
 ### Quick Start
 
