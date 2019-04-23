@@ -8,8 +8,6 @@ import { toPromise } from './rxjs';
 // pending -> success / fail
 // success / fail -> pending
 
-let _form = {};
-
 export default function(fields) {
   const form = {};
 

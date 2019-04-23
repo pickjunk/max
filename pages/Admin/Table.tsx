@@ -1,16 +1,10 @@
-import '../../utils/bootstrap';
-// --- Post bootstrap -----
-import React, { useState } from 'react';
-import Layout from '../../layouts/manager';
+import React from 'react';
+import { Tooltip, IconButton } from '@material-ui/core';
+import { Edit, Stop, PlayArrow, Delete } from '@material-ui/icons';
+import router from '@pickjunk/min/Router';
 import Table from '../../components/Table';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import StopIcon from '@material-ui/icons/Stop';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DeleteIcon from '@material-ui/icons/Delete';
 import graphql from '../../utils/graphql';
-import { manager } from '../../utils/request';
+import { dashboard } from '../../utils/request';
 
 const schema = `
 query ($page: Int, $search: String) {
@@ -46,12 +40,20 @@ const columns = [
     title: 'Role',
     render({ id }) {
       if (id == 1) {
-        return 'role';
+        return 'root';
       }
       return '-';
     },
   },
-  { title: 'Last Login', field: 'ltime' },
+  {
+    title: 'Last Login',
+    render({ ltime }) {
+      if (ltime) {
+        return ltime;
+      }
+      return '-';
+    },
+  },
   { title: 'Created At', field: 'ctime' },
   { title: 'Updated At', field: 'mtime' },
   {
@@ -60,19 +62,15 @@ const columns = [
       return (
         <>
           <Tooltip title="edit">
-            <IconButton
-              onClick={() =>
-                router.push(`/admin/${id}`, `/admin/form?id=${id}`)
-              }
-            >
-              <EditIcon />
+            <IconButton onClick={() => router.push(`/admin/${id}`)}>
+              <Edit />
             </IconButton>
           </Tooltip>
           {!btime ? (
             <Tooltip title="ban">
               <IconButton
                 onClick={() =>
-                  manager(
+                  dashboard(
                     graphql('/api/admin', banSchema, {
                       ids: [id],
                       status: true,
@@ -80,14 +78,14 @@ const columns = [
                   )
                 }
               >
-                <StopIcon />
+                <Stop />
               </IconButton>
             </Tooltip>
           ) : (
             <Tooltip title="unban">
               <IconButton
                 onClick={() =>
-                  manager(
+                  dashboard(
                     graphql('/api/admin', banSchema, {
                       ids: [id],
                       status: false,
@@ -95,7 +93,7 @@ const columns = [
                   )
                 }
               >
-                <PlayArrowIcon />
+                <PlayArrow />
               </IconButton>
             </Tooltip>
           )}
@@ -103,14 +101,14 @@ const columns = [
             <Tooltip title="delete">
               <IconButton
                 onClick={() =>
-                  manager(
+                  dashboard(
                     graphql('/api/admin', delSchema, {
                       ids: [id],
                     }),
                   )
                 }
               >
-                <DeleteIcon />
+                <Delete />
               </IconButton>
             </Tooltip>
           )}
@@ -122,7 +120,7 @@ const columns = [
 
 export default function() {
   async function load({ page, search }) {
-    const { admins } = await manager(
+    const { admins } = await dashboard(
       graphql('/api/admin', schema, {
         page,
         search,
@@ -132,13 +130,6 @@ export default function() {
   }
 
   return (
-    <Layout>
-      <Table
-        columns={columns}
-        data={load}
-        pageSize={20}
-        showSearch={true}
-      />
-    </Layout>
+    <Table columns={columns} data={load} pageSize={20} showSearch={true} />
   );
 }

@@ -1,8 +1,24 @@
-module.exports = {
-  '/gate': { page: '/gate' },
+export default [
+  {
+    path: '/exception/:code',
+    component: '../pages/Exception',
+  },
 
-  '/': { page: '/admin/table' },
-  '/admin/:id': { page: '/admin/form' },
-
-  '/exception/:code': { page: '/exception' },
-};
+  {
+    path: '/gate',
+    component: '../pages/Gate',
+  },
+  {
+    component: '../layouts/Dashboard',
+    children: [
+      {
+        path: '/',
+        component: '../pages/Admin/Table',
+      },
+      {
+        path: '/admin/:id',
+        component: '../pages/Admin/Form',
+      },
+    ],
+  },
+];

@@ -1,12 +1,9 @@
-import '../../utils/bootstrap';
-// --- Post bootstrap -----
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Layout from '../../layouts/manager';
+import { Typography } from '@material-ui/core';
 
 export default function Form() {
   return (
-    <Layout>
+    <>
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus
@@ -35,6 +32,6 @@ export default function Form() {
         maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
         aliquam ultrices sagittis orci a.
       </Typography>
-    </Layout>
+    </>
   );
 }

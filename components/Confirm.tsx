@@ -1,11 +1,25 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
+import {
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from '@material-ui/core';
 
-export default function({ message, okText, cancelText, open, onClose }) {
+export default function Confirm({
+  message,
+  okText,
+  cancelText,
+  open,
+  onClose,
+}: {
+  message: string;
+  okText?: string;
+  cancelText?: string;
+  open: boolean;
+  onClose: () => void;
+}) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>

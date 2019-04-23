@@ -14,9 +14,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Next.js
-/.next
-
 # config
 /config/app.js
 /config/proxy.js
+
+# lock
+yarn.lock
+package-lock.json

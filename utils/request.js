@@ -1,5 +1,6 @@
-import router from 'next/router';
+import router from '@pickjunk/min/Router';
 import Cookies from 'js-cookie';
+import './promise';
 import Raven from './raven';
 import profile$ from '../subjects/profile$';
 
@@ -85,7 +86,7 @@ export default function request(url, options) {
     });
 }
 
-export function manager(request) {
+export function dashboard(request) {
   return request.catch(e => {
     const status = e.name;
 
