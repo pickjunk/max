@@ -8,5 +8,41 @@
     "@babel/plugin-transform-runtime",
     "@babel/proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread",
+    [
+      "import",
+      {
+        "libraryName": "@material-ui/core",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false
+      },
+      "@material-ui/core"
+    ],
+    [
+      "import",
+      {
+        "libraryName": "@material-ui/icons",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false
+      },
+      "@material-ui/icons"
+    ],
+    [
+      "import",
+      {
+        "libraryName": "lodash",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false
+      },
+      "lodash"
+    ],
+    [
+      "import",
+      {
+        "libraryName": "rxjs/",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false
+      },
+      "rxjs"
+    ]
   ]
 }

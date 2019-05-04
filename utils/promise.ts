@@ -5,23 +5,19 @@
 // DO NOT REMOVE THIS LINE!
 const p = Promise;
 
-// In next.js@8 development environment, code will be compiled and reloaded
+// Stoppable Promise
+// https://github.com/xieranmaya/blog/issues/5
+const STOP_VALUE = Symbol('PromiseStop');
+const STOPPER_PROMISE = p.resolve(STOP_VALUE);
+
+// In development environment, code will be compiled and reloaded
 // multiple times in the same process. This module have a side effect for
 // global Promise, which means we must make sure this module only initialized
 // once, otherwise an infinite loop will occur in the then function and `Maximum
 // call stack size exceeded` will fuck and fill your screen.
 // DO NOT REMOVE THIS IF STATEMENT!
-if (!p.stop) {
-  // Stoppable Promise
-  // https://github.com/xieranmaya/blog/issues/5
-  const STOP_VALUE = Symbol('PromiseStop');
-  const STOPPER_PROMISE = p.resolve(STOP_VALUE);
-
-  p.stop = function() {
-    return STOPPER_PROMISE;
-  };
-
-  p.prototype._then = p.prototype.then;
+if (!(p.prototype as any)._then) {
+  (p.prototype as any)._then = p.prototype.then;
   p.prototype.then = function(onResolved, onRejected) {
     return this._then(
       onResolved
@@ -33,3 +29,11 @@ if (!p.stop) {
     );
   };
 }
+
+class StoppablePromise<T> extends Promise<T> {
+  static stop(): typeof STOPPER_PROMISE {
+    return STOPPER_PROMISE;
+  }
+}
+
+export default StoppablePromise;

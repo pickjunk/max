@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  makeStyles,
   Button,
   Grid,
   TextField,
@@ -9,12 +8,15 @@ import {
   Theme,
 } from '@material-ui/core';
 import { Person, Lock, Visibility, VisibilityOff } from '@material-ui/icons';
-import { createStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/styles';
 import router from '@pickjunk/min/Router';
 import Cookies from 'js-cookie';
 import Timeout from '../components/Timeout';
+import Loading from '../components/Loading';
 import graphql from '../utils/graphql';
 import useForm from '../utils/form';
+import { payload } from '../utils/jwt';
+import profile$ from '../subjects/profile$';
 
 const useStyles = makeStyles<Theme>(theme =>
   createStyles({
@@ -37,44 +39,43 @@ const useStyles = makeStyles<Theme>(theme =>
         },
       },
       [theme.breakpoints.up(450)]: {
-        width: 350,
+        width: 280,
         height: 'unset',
         '& $tip': {
-          top: -48,
+          top: -50,
         },
       },
-      marginTop: 160,
-      padding: '24px 40px 40px',
+      marginTop: 230,
       position: 'relative',
     },
     icon: {
       width: 24,
       height: 24,
-      margin: '16px 16px 16px 0',
+      margin: '8px 8px 8px 0',
     },
     visible: {
-      padding: 16,
+      padding: 8,
       '& $icon': {
         margin: 0,
       },
     },
     input: {
       '& input': {
-        padding: '16px 0',
+        padding: '8px 0',
       },
     },
     login: {
       width: '100%',
-      height: 48,
+      height: 36,
     },
     tip: {
       position: 'absolute',
       left: 0,
       right: 0,
       background: theme.palette.error.main,
-      height: 48,
+      height: 36,
       textAlign: 'center',
-      lineHeight: '48px',
+      lineHeight: '36px',
       color: theme.palette.error.contrastText,
     },
   }),
@@ -124,6 +125,8 @@ export default function Gate() {
     try {
       setSubmitting(true);
       await graphql('/api/gate', schema, form.data());
+      const token = Cookies.get('token');
+      profile$.next(payload(token));
       router.replace('/');
     } catch ({ code }) {
       switch (code) {
@@ -140,7 +143,12 @@ export default function Gate() {
 
   return (
     <div className={classes.background}>
-      <div className={classes.box}>
+      <div className={classes.box} onKeyDown={e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          login();
+        }
+      }}>
         <Timeout
           status={Boolean(loginError)}
           duration={3000}
@@ -177,7 +185,7 @@ export default function Gate() {
               />
             ))}
           </Grid>
-          <Grid item style={{ marginBottom: 40 }}>
+          <Grid item style={{ marginBottom: 28 }}>
             {form.field('passwd', ({ value, setValue }) => (
               <TextField
                 className={classes.input}
@@ -209,15 +217,16 @@ export default function Gate() {
             ))}
           </Grid>
           <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.login}
-              onClick={login}
-              disabled={submitting}
-            >
-              Login
-            </Button>
+            <Loading status={submitting} width={20} height={20}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.login}
+                onClick={login}
+              >
+                Login
+              </Button>
+            </Loading>
           </Grid>
         </Grid>
       </div>

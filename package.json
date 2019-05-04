@@ -1,5 +1,6 @@
 {
   "name": "max",
+  "sideEffects": false,
   "version": "1.0.0",
   "description": "Min Project",
   "main": "bootstrap.js",
@@ -20,6 +21,7 @@
     "@material-ui/icons": "next",
     "@material-ui/styles": "next",
     "@pickjunk/min": "github:pickjunk/min#develop",
+    "babel-plugin-import": "^1.11.0",
     "clsx": "1.0.3",
     "color": "^3.1.0",
     "cross-env": "5.2.0",
@@ -29,5 +31,8 @@
     "lodash": "4.17.11",
     "raven-js": "3.27.0",
     "rxjs": "6.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7"
   }
 }

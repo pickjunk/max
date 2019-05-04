@@ -1,6 +1,7 @@
+import router from '@pickjunk/min/Router';
+import Promise from './promise';
 import request from './request';
 import Raven from './raven';
-import router from '@pickjunk/min/Router';
 
 export default function graphql(uri, query, variables) {
   return request(uri, {

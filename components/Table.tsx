@@ -13,10 +13,10 @@ import {
   Toolbar,
   Paper,
   Theme,
-  makeStyles,
 } from '@material-ui/core';
-import { createStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/styles';
 import { Search, Clear } from '@material-ui/icons';
+import Loading from './Loading';
 
 interface Row {
   [key: string]: any;
@@ -39,31 +39,27 @@ interface Column {
 
 const useStyles = makeStyles<Theme>(theme =>
   createStyles({
-    root: {
-      position: 'relative',
-    },
     spacer: {
       flex: 1,
     },
     actions: {
       color: theme.palette.text.secondary,
+      '& button': {
+        padding: 8,
+      }
     },
-    mask: {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      background: theme.palette.grey[100],
-      opacity: 0.7,
-    },
-    loading: {
-      color: theme.palette.primary.main,
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -20,
-      marginLeft: -20,
+    table: {
+      '& th': {
+        paddingTop: 8,
+        paddingBottom: 8,
+      },
+      '& td': {
+        paddingTop: 8,
+        paddingBottom: 8,
+      },
+      '& td>button': {
+        padding: 4,
+      },
     },
   }),
 );
@@ -128,68 +124,64 @@ export default function _Table({
   }, []);
 
   return (
-    <Paper className={classes.root}>
-      {(title || showSearch) && (
-        <Toolbar>
-          {title && <Typography variant="h6">{title}</Typography>}
-          <div className={classes.spacer} />
-          <div className={classes.actions}>
-            {showSearch && (
-              <TextField
-                value={search}
-                onChange={changeSearch}
-                onKeyPress={enterSearch}
-                InputProps={{
-                  startAdornment: <Search />,
-                  endAdornment: (
-                    <IconButton onClick={clearSearch}>
-                      <Clear />
-                    </IconButton>
-                  ),
-                }}
-              />
-            )}
-          </div>
-        </Toolbar>
-      )}
+    <Paper>
+      <Loading status={loading}>
+        {(title || showSearch) && (
+          <Toolbar>
+            {title && <Typography variant="h6">{title}</Typography>}
+            <div className={classes.spacer} />
+            <div className={classes.actions}>
+              {showSearch && (
+                <TextField
+                  value={search}
+                  onChange={changeSearch}
+                  onKeyPress={enterSearch}
+                  InputProps={{
+                    startAdornment: <Search />,
+                    endAdornment: (
+                      <IconButton onClick={clearSearch}>
+                        <Clear />
+                      </IconButton>
+                    ),
+                  }}
+                />
+              )}
+            </div>
+          </Toolbar>
+        )}
 
-      <Table>
-        <TableHead>
-          <TableRow key="th">
-            {columns.map(({ title, field, render, ...props }) => (
-              <TableCell key={field || title} {...props}>
-                {title}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {list.data.map(row => (
-            <TableRow key={row[rowKey]}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow key="th">
               {columns.map(({ title, field, render, ...props }) => (
                 <TableCell key={field || title} {...props}>
-                  {render ? render(row) : row[field]}
+                  {title}
                 </TableCell>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        rowsPerPageOptions={[]}
-        labelDisplayedRows={labelDisplayedRows}
-        page={page}
-        rowsPerPage={pageSize}
-        onChangePage={(_, page) => load(page)}
-        count={list.total}
-        component={'div' as any}
-      />
-
-      {loading && (
-        <div className={classes.mask}>
-          <CircularProgress className={classes.loading} />
-        </div>
-      )}
+          </TableHead>
+          <TableBody>
+            {list.data.map(row => (
+              <TableRow key={row[rowKey]}>
+                {columns.map(({ title, field, render, ...props }) => (
+                  <TableCell key={field || title} {...props}>
+                    {render ? render(row) : row[field]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[]}
+          labelDisplayedRows={labelDisplayedRows}
+          page={page}
+          rowsPerPage={pageSize}
+          onChangePage={(_, page) => load(page)}
+          count={list.total}
+          component={'div' as any}
+        />
+      </Loading>
     </Paper>
   );
 }

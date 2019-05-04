@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from '@pickjunk/min/Router';
-import { Typography, Theme, makeStyles } from '@material-ui/core';
-import { createStyles } from '@material-ui/core/styles';
+import { Typography, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/styles';
 import Layout from '../layouts/Dashboard';
 
 const map = {

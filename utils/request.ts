@@ -1,6 +1,6 @@
 import router from '@pickjunk/min/Router';
 import Cookies from 'js-cookie';
-import './promise';
+import Promise from './promise';
 import Raven from './raven';
 import profile$ from '../subjects/profile$';
 
@@ -22,7 +22,6 @@ function checkStatus(response) {
   const errortext = codeMessage[response.status] || response.statusText;
   const error = new Error(errortext);
   error.name = response.status;
-  error.response = response;
 
   Raven.captureException(error);
   throw error;

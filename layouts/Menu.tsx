@@ -1,9 +1,8 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import clsx from 'clsx';
 import router, { useRouter } from '@pickjunk/min/Router';
 import color from 'color';
 import {
-  makeStyles,
   List,
   ListItem,
   ListItemIcon,
@@ -11,7 +10,7 @@ import {
   Collapse,
   Theme,
 } from '@material-ui/core';
-import { useTheme, createStyles } from '@material-ui/core/styles';
+import { useTheme, createStyles, makeStyles } from '@material-ui/styles';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 
 const useMenuStyles = makeStyles<Theme>(theme =>
@@ -36,14 +35,52 @@ const useMenuStyles = makeStyles<Theme>(theme =>
     opened: {
       color: theme.palette.secondary.contrastText,
     },
-    selected: {
+    active: {
       color: theme.palette.secondary.contrastText,
       backgroundColor: theme.palette.primary.main,
     },
   }),
 );
 
-export default function Menu({ data, level = 1 }) {
+export default function Menu({ data }) {
+  const [menu, setMenu] = useState(data);
+  const { location } = useRouter();
+
+  useEffect(
+    function() {
+      function traverse(tree) {
+        return tree.map(function(node) {
+          const newNode = { ...node };
+          let { name, path, args, children } = newNode;
+
+          let active = false;
+          if (name || path) {
+            active = location === router.link(name || path, args);
+          }
+          if (children) {
+            children = traverse(children);
+            for (const child of children) {
+              if (child.active) {
+                active = true;
+              }
+            }
+            newNode.children = children;
+          }
+          newNode.active = active;
+
+          return newNode;
+        });
+      }
+
+      setMenu(traverse(data));
+    },
+    [data, location],
+  );
+
+  return <SubMenu data={menu} />;
+}
+
+function SubMenu({ data, level = 1 }) {
   const theme = useTheme<Theme>();
   const classes = useMenuStyles();
   const listStyle = {
@@ -53,14 +90,24 @@ export default function Menu({ data, level = 1 }) {
   };
   const itemStyle = { paddingLeft: theme.spacing(2 + 5 * (level - 1)) };
 
-  const [collapseIndex, setCollapseIndex] = useState(-1);
-  const { location } = useRouter();
+  const [openIndex, setOpenIndex] = useState(-1);
+
+  useEffect(
+    function() {
+      for (let i in data) {
+        if (data[i].active) {
+          setOpenIndex(Number(i));
+        }
+      }
+    },
+    [data],
+  );
 
   return (
     <List style={listStyle}>
-      {data.map(({ icon, label, path, name, args, children }, i) => {
+      {data.map(({ icon, label, path, name, args, children, active }, i) => {
         if (children && children.length > 0) {
-          const open = i === collapseIndex;
+          const open = i === openIndex;
 
           return (
             <Fragment key={label}>
@@ -71,9 +118,9 @@ export default function Menu({ data, level = 1 }) {
                 style={itemStyle}
                 onClick={function() {
                   if (open) {
-                    setCollapseIndex(-1);
+                    setOpenIndex(-1);
                   } else {
-                    setCollapseIndex(i);
+                    setOpenIndex(i);
                   }
                 }}
               >
@@ -85,13 +132,13 @@ export default function Menu({ data, level = 1 }) {
                   primary={label}
                 />
                 {open ? (
-                  <ExpandLess className={classes.arrow} />
+                  <ExpandLess key="less" className={classes.arrow} />
                 ) : (
-                  <ExpandMore className={classes.arrow} />
+                  <ExpandMore key="more" className={classes.arrow} />
                 )}
               </ListItem>
               <Collapse className={classes.collapse} in={open}>
-                <Menu data={children} level={level + 1} />
+                <SubMenu data={children} level={level + 1} />
               </Collapse>
             </Fragment>
           );
@@ -100,7 +147,7 @@ export default function Menu({ data, level = 1 }) {
         return (
           <ListItem
             className={clsx(classes.item, {
-              [classes.selected]: location === router.link(path, args),
+              [classes.active]: active,
             })}
             style={itemStyle}
             key={label}

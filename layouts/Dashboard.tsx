@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import router from '@pickjunk/min/Router';
 import color from 'color';
 import {
-  makeStyles,
   Theme,
   Drawer,
   AppBar,
@@ -20,7 +19,7 @@ import {
   FormatIndentDecrease,
   AccountCircle,
 } from '@material-ui/icons';
-import { createStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/styles';
 import NavMenu from './Menu';
 import { name } from '../config/app';
 import menu from '../config/menu';

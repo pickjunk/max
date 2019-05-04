@@ -1,8 +1,12 @@
 /* eslint-disable */
-import Raven from 'raven-js';
+import Raven, { RavenOptions, RavenStatic } from 'raven-js';
 import { raven } from '../config/app';
 
-let client;
+interface RavenClient {
+  captureException(ex: string | Error | ErrorEvent, options?: RavenOptions): RavenStatic
+}
+
+let client: RavenClient;
 if (process.env.NODE_ENV === 'production' && raven) {
   Raven.config(raven).install();
   client = Raven;
@@ -15,7 +19,7 @@ if (process.env.NODE_ENV === 'production' && raven) {
   };
 }
 
-if (process.browser) {
+if (typeof window !== 'undefined') {
   window.onerror = function(msg, url, line, col, e) {
     client.captureException(e);
   };

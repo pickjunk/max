@@ -2,7 +2,7 @@ import { PureComponent, ReactNode } from 'react';
 
 export default class Timeout extends PureComponent {
   status: boolean;
-  timer: number;
+  timer: any;
 
   props: {
     status: boolean;
@@ -21,7 +21,7 @@ export default class Timeout extends PureComponent {
 
     if (status) {
       if (this.timer) {
-        clearInterval(this.timer);
+        clearTimeout(this.timer);
         this.timer = null;
       }
 
@@ -34,7 +34,7 @@ export default class Timeout extends PureComponent {
 
   componentWillUnmount() {
     if (this.timer) {
-      clearInterval(this.timer);
+      clearTimeout(this.timer);
       this.timer = null;
     }
   }
